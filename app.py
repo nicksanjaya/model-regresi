@@ -64,19 +64,20 @@ def main():
 if __name__ == '__main__':
 	main() 
 
-# Menyisipkan CSS untuk meratakan tombol ke tengah
+import streamlit as st
+
+# Menyisipkan CSS untuk menggeser tombol ke kanan
 st.markdown(
     """
     <style>
-    .center-button {
+    .right-button {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+        justify-content: flex-end;
+        margin-top: 20px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# Menampilkan tombol di dalam elemen dengan kelas 'center-button'
+# Menampilkan tombol di dalam elemen dengan kelas 'right-button'
 with st.container():
-    st.markdown('<div class="center-button"><button>Click Me</button></div>', unsafe_allow_html=True)
+    st.markdown('<div class="right-button"><button>Click Me</button></div>', unsafe_allow_html=True)
