@@ -63,3 +63,20 @@ def main():
            
 if __name__ == '__main__':
 	main() 
+
+# Menyisipkan CSS untuk meratakan tombol ke tengah
+st.markdown(
+    """
+    <style>
+    .center-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# Menampilkan tombol di dalam elemen dengan kelas 'center-button'
+with st.container():
+    st.markdown('<div class="center-button"><button>Click Me</button></div>', unsafe_allow_html=True)
