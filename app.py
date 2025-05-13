@@ -1,83 +1,26 @@
-# Mengimpor library
-import pandas as pd
-import streamlit as st
-import pickle
-
-# Menghilangkan warning
-import warnings
-warnings.filterwarnings("ignore")
-
-# Menulis judul
-st.markdown("<h2 style='text-align: center; '> Model Regresi </h2>", unsafe_allow_html=True)
-st.markdown('---'*10)
-
-
-# Fungsi untuk prediksi
-def final_prediction(values, model):
-    global prediction
-    prediction = model.predict(values)
-    return prediction
-
-# Ini merupakan fungsi utama
-def main():
-    
-    # Nilai awal
-    rd = 150000.2
-    adm = 140000.3
-    mkt = 300000.1
-    
-    with st.container():
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            rd = st.number_input('R&D', value=rd)
-        with col2:
-            adm = st.number_input('Administrasi', value=adm)
-        with col3:
-           mkt = st.number_input('Marketing', value=mkt)
-    
-    
-    st.markdown('---'*10)
-    
-    wly = st.selectbox('Lokasi', ('New York', 'California', 'Florida'))
-    
-    data = {
-        'R&D': rd,
-        'Administrasi': adm,
-        'Marketing': mkt,
-        'Wilayah': wly,
-        }
-    
-    kolom = list(data.keys())
-    
-    df_final = pd.DataFrame([data.values()],columns=kolom)
-    
-    # load model
-    my_model = pickle.load(open('model_regresi_terbaik.pkl', 'rb'))
-    
-    # Predict
-    result = round(float(final_prediction(df_final, my_model)),2)
-    
-    st.markdown('---'*10)
-    
-    st.write('<center><b><h3>Predicted Profit= ', result,'</b></h3>', unsafe_allow_html=True)
-           
-if __name__ == '__main__':
-	main() 
-
 import streamlit as st
 
-# Menyisipkan CSS untuk menggeser tombol ke kanan
-st.markdown(
-    """
-    <style>
-    .right-button {
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 20px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+st.title("Form Data Pribadi")
 
-# Menampilkan tombol di dalam elemen dengan kelas 'right-button'
-with st.container():
-    st.markdown('<div class="right-button"><button>Click Me</button></div>', unsafe_allow_html=True)
+with st.form("data_pribadi_form"):
+    st.header("Silakan isi data pribadi Anda")
+
+    nama = st.text_input("Nama Lengkap")
+    tanggal_lahir = st.date_input("Tanggal Lahir")
+    jenis_kelamin = st.radio("Jenis Kelamin", ["Laki-laki", "Perempuan", "Lainnya"])
+    email = st.text_input("Email")
+    no_telepon = st.text_input("Nomor Telepon")
+    alamat = st.text_area("Alamat Lengkap")
+
+    # Tombol submit
+    submitted = st.form_submit_button("Kirim")
+
+    if submitted:
+        st.success("Data berhasil dikirim!")
+        st.write("### Data yang Anda masukkan:")
+        st.write(f"**Nama:** {nama}")
+        st.write(f"**Tanggal Lahir:** {tanggal_lahir}")
+        st.write(f"**Jenis Kelamin:** {jenis_kelamin}")
+        st.write(f"**Email:** {email}")
+        st.write(f"**Nomor Telepon:** {no_telepon}")
+        st.write(f"**Alamat:** {alamat}")
