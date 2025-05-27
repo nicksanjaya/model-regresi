@@ -24,8 +24,7 @@ with st.form("form_asuransi"):
         tanggal_mulai = st.date_input("Tanggal Mulai Garansi", value=date.today())
         tanggal_berakhir = tanggal_mulai + timedelta(days=365)
         st.markdown(f"🗓️ **Tanggal Berakhir Garansi:** {tanggal_berakhir.strftime('%d %B %Y')}")
-        batas_jarak_tempuh = jarak_tempuh + 50000
-        st.markdown(f"🔧 **Batas Jarak Tempuh Kendaraan:** {batas_jarak_tempuh:,} KM")
+        batas_jarak_tempuh = st.number_input("Batas Jarak Tempuh (KM)", min_value=0)
         biaya_derek = st.number_input("Biaya Mobil Derek (Rp)", min_value=0)
         komponen = [
             "Mesin Caroline", "Transmisi", "Sistem Kemudi", "Sistem Pengereman",
