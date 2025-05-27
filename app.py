@@ -1,11 +1,23 @@
 import streamlit as st
 from datetime import date, timedelta
+import pandas as pd
+import random
 
+# Konfigurasi halaman
 st.set_page_config(page_title="Pendaftaran Asuransi", layout="wide")
 st.title("🚗 Pendaftaran Asuransi Kendaraan")
 
-with st.form("form_asuransi"):
+# Fungsi format tanggal Indonesia
+def format_tanggal(tgl):
+    bulan_id = {
+        "January": "Januari", "February": "Februari", "March": "Maret", "April": "April",
+        "May": "Mei", "June": "Juni", "July": "Juli", "August": "Agustus",
+        "September": "September", "October": "Oktober", "November": "November", "December": "Desember"
+    }
+    return tgl.strftime(f"%-d {bulan_id[tgl.strftime('%B')]} %Y")
 
+# Form input
+with st.form("form_asuransi"):
     col1, col2 = st.columns(2)
 
     with col1:
@@ -45,5 +57,76 @@ with st.form("form_asuransi"):
 
     submitted = st.form_submit_button("Submit")
 
+# ==============================
+# TAMPILAN RINGKASAN SETELAH SUBMIT
+# ==============================
 if submitted:
     st.success("✅ Data Berhasil Disubmit!")
+
+    # Perhitungan otomatis
+    tanggal_berakhir = tanggal_mulai + timedelta(days=364)
+    batas_jarak_tempuh = jarak_tempuh + 50000
+    biaya_derek = 700000
+    nomor_polis = f"POLIS-2025-{random.randint(1000,9999)}"
+    nomor_sertifikat = f"CERT-2025-{random.randint(1000,9999)}"
+
+    # Data untuk ditampilkan dalam tabel
+    data_ringkasan = {
+        "Informasi": [
+            "Nomor Polis",
+            "Nomor Sertifikat",
+            "Nama Penjual",
+            "Alamat Penjual",
+            "Nama Pembeli",
+            "Nomor KTP",
+            "Alamat Pembeli",
+            "Nomor Telepon",
+            "Email",
+            "Merk / Model / Tipe",
+            "Plat Nomor",
+            "Nomor Rangka",
+            "Nomor Mesin",
+            "Kapasitas Mesin (cc)",
+            "Tahun Mobil",
+            "Transmisi",
+            "Warna",
+            "Bahan Bakar",
+            "Jarak Tempuh (KM)",
+            "Batas Jarak Tempuh (KM)",
+            "Periode Garansi",
+            "Komponen Ditanggung",
+            "Biaya Mobil Derek",
+            "Batas Maksimum Klaim"
+        ],
+        "Detail": [
+            nomor_polis,
+            nomor_sertifikat,
+            penjual_nama,
+            penjual_alamat,
+            pembeli_nama,
+            pembeli_ktp,
+            pembeli_alamat,
+            pembeli_telepon,
+            pembeli_email,
+            f"{merk} / {model} / {tipe}",
+            plat_nomor,
+            nomor_rangka,
+            nomor_mesin,
+            kapasitas_mesin,
+            tahun_mobil,
+            transmisi,
+            warna,
+            bahan_bakar,
+            f"{jarak_tempuh:,} KM",
+            f"{batas_jarak_tempuh:,} KM",
+            f"{format_tanggal(tanggal_mulai)} – {format_tanggal(tanggal_berakhir)}",
+            ", ".join(ditanggung),
+            f"Rp {biaya_derek:,}",
+            "Rp 20.000.000 / Rp 50.000.000"
+        ]
+    }
+
+    # Tampilkan dalam bentuk tabel
+    df_ringkasan = pd.DataFrame(data_ringkasan)
+    st.subheader("📄 Sertifikat Asuransi Kendaraan")
+    st.table(df_ringkasan)
