@@ -24,7 +24,8 @@ with st.form("form_asuransi"):
         tanggal_mulai = st.date_input("Tanggal Mulai Garansi", value=date.today())
         tanggal_berakhir = tanggal_mulai + timedelta(days=365 - 1)
         st.markdown(f"🗓️ **Tanggal Berakhir Garansi:** {tanggal_berakhir.strftime('%d %B %Y')}")
-        batas_jarak_tempuh = st.number_input("Batas Jarak Tempuh (KM)", min_value=0)
+        batas_jarak_tempuh = jarak_tempuh + 50000
+        st.markdown(f"🔧 **Batas Jarak Tempuh Kendaraan:** {batas_jarak_tempuh:,} KM")
         biaya_derek = 700000
         st.markdown(f"🚚 **Biaya Mobil Derek yang Ditanggung:** Rp {biaya_derek:,}")
         komponen = [
@@ -52,25 +53,3 @@ with st.form("form_asuransi"):
 
 if submitted:
     st.success("✅ Data Berhasil Disubmit!")
-
-    with st.expander("📄 Lihat Ringkasan Data"):
-        st.markdown("### Data Penjual & Pembeli")
-        st.write(f"**Penjual:** {penjual_nama} - {penjual_alamat}")
-        st.write(f"**Pembeli:** {pembeli_nama} | KTP: {pembeli_ktp}")
-        st.write(f"Alamat: {pembeli_alamat}, Telp: {pembeli_telepon}, Email: {pembeli_email}")
-
-        st.markdown("### Data Kendaraan")
-        st.write(
-            f"{merk} {model} {tipe}, Plat: {plat_nomor}, Tahun: {tahun_mobil}, {kapasitas_mesin}cc, {warna}, {transmisi}, {bahan_bakar}, {jarak_tempuh:,} KM"
-        )
-        st.write(f"Nomor Rangka: {nomor_rangka}, Nomor Mesin: {nomor_mesin}")
-
-        st.markdown("### Garansi & Kompensasi")
-        st.write(f"Periode Garansi: {periode_garansi}")
-        st.write(f"Batas Jarak Tempuh: {batas_jarak_tempuh:,} KM")
-        st.write(f"Biaya Derek Ditanggung: Rp {biaya_derek:,}")
-        st.write("**Batas Maksimum Kompensasi:**")
-        st.write("- Total Klaim: Rp 50.000.000")
-        st.write("- Per Klaim: Rp 20.000.000")
-        st.write("**Komponen yang Ditanggung:**")
-        st.write(", ".join(ditanggung))
