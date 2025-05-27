@@ -1,4 +1,5 @@
 import streamlit as st
+from datetime import date, timedelta
 
 st.set_page_config(page_title="Pendaftaran Asuransi", layout="wide")
 st.title("🚗 Pendaftaran Asuransi Kendaraan")
@@ -20,7 +21,9 @@ with st.form("form_asuransi"):
         pembeli_email = st.text_input("Email")
 
         st.subheader("📆 Garansi & Kompensasi")
-        periode_garansi = st.text_input("Periode Garansi")
+        tanggal_mulai = st.date_input("Tanggal Mulai Garansi", value=date.today())
+        tanggal_berakhir = tanggal_mulai + timedelta(days=365)
+        st.markdown(f"🗓️ **Tanggal Berakhir Garansi:** {tanggal_berakhir.strftime('%d %B %Y')}")
         batas_jarak_tempuh = st.number_input("Batas Jarak Tempuh (KM)", min_value=0)
         biaya_derek = st.number_input("Biaya Mobil Derek (Rp)", min_value=0)
         komponen = [
