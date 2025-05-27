@@ -5,6 +5,7 @@ st.set_page_config(page_title="Pendaftaran Asuransi", layout="wide")
 st.title("🚗 Pendaftaran Asuransi Kendaraan")
 
 with st.form("form_asuransi"):
+
     col1, col2 = st.columns(2)
 
     with col1:
@@ -18,6 +19,20 @@ with st.form("form_asuransi"):
         pembeli_alamat = st.text_area("Alamat Pembeli", height=50)
         pembeli_telepon = st.text_input("Nomor Telepon")
         pembeli_email = st.text_input("Email")
+
+        st.subheader("📆 Garansi & Kompensasi")
+        tanggal_mulai = st.date_input("Tanggal Mulai Garansi", value=date.today())
+        tanggal_berakhir = tanggal_mulai + timedelta(days=365 - 1)
+        st.markdown(f"🗓️ **Tanggal Berakhir Garansi:** {tanggal_berakhir.strftime('%d %B %Y')}")
+        #batas_jarak_tempuh = jarak_tempuh + 50000
+        st.markdown(f"🔧 **Batas Jarak Tempuh Kendaraan:** 100000 KM")
+        biaya_derek = 700000
+        st.markdown(f"🚚 **Biaya Mobil Derek yang Ditanggung:** Rp {biaya_derek:,}")
+        komponen = [
+            "Mesin Caroline", "Transmisi", "Sistem Kemudi", "Sistem Pengereman",
+            "Sistem Penggerak Roda", "Sistem Kelistrikan", "Pendingin (AC)"
+        ]
+        ditanggung = st.multiselect("Komponen yang Ditanggung", komponen, default=komponen)
 
     with col2:
         st.subheader("🚘 Data Kendaraan")
@@ -34,30 +49,7 @@ with st.form("form_asuransi"):
         bahan_bakar = st.selectbox("Bahan Bakar", ["Bensin", "Diesel", "Listrik", "Hybrid"])
         jarak_tempuh = st.number_input("Jarak Tempuh (KM)", min_value=0)
 
-    # Setelah jarak tempuh diinput
-    batas_jarak_tempuh = jarak_tempuh + 50000
-
-    st.divider()
-
-    st.subheader("📆 Garansi & Kompensasi")
-    tanggal_mulai = st.date_input("Tanggal Mulai Garansi", value=date.today())
-    tanggal_berakhir = tanggal_mulai + timedelta(days=365 - 1)
-    st.markdown(f"🗓️ **Periode Garansi:** {format_tanggal(tanggal_mulai)} – {format_tanggal(tanggal_berakhir)}")
-    st.markdown(f"🔧 **Batas Jarak Tempuh Kendaraan:** {batas_jarak_tempuh:,} KM")
-    biaya_derek = 700000
-    st.markdown(f"🚚 **Biaya Mobil Derek yang Ditanggung:** Rp {biaya_derek:,}")
-
-    komponen = [
-        "Mesin Caroline", "Transmisi", "Sistem Kemudi", "Sistem Pengereman",
-        "Sistem Penggerak Roda", "Sistem Kelistrikan", "Pendingin (AC)"
-    ]
-    ditanggung = st.multiselect("Komponen yang Ditanggung", komponen, default=komponen)
-
     submitted = st.form_submit_button("Submit")
-
-# ======================
-# TAMPILAN HASIL SUBMIT
-# ======================
 
 if submitted:
     st.success("✅ Data Berhasil Disubmit!")
