@@ -22,7 +22,7 @@ with st.form("form_asuransi"):
 
         st.subheader("📆 Garansi & Kompensasi")
         tanggal_mulai = st.date_input("Tanggal Mulai Garansi", value=date.today())
-        tanggal_berakhir = tanggal_mulai + timedelta(days=365)
+        tanggal_berakhir = tanggal_mulai + timedelta(days=365 - 1)
         st.markdown(f"🗓️ **Tanggal Berakhir Garansi:** {tanggal_berakhir.strftime('%d %B %Y')}")
         batas_jarak_tempuh = st.number_input("Batas Jarak Tempuh (KM)", min_value=0)
         biaya_derek = 700000
