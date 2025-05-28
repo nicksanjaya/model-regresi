@@ -20,6 +20,9 @@ def format_tanggal(tgl):
 if "daftar_klaim" not in st.session_state:
     st.session_state.daftar_klaim = []
 
+# Kredit limit tetap
+kredit_limit_awal = 50000000
+
 # Form input
 with st.form("form_asuransi"):
     col1, col2 = st.columns(2)
@@ -71,7 +74,6 @@ if submitted:
     tanggal_berakhir = tanggal_mulai + timedelta(days=364)
     batas_jarak_tempuh = jarak_tempuh + 50000
     biaya_derek = 700000
-    kredit_limit_klaim = 50000000  # Kredit limit tetap
     nomor_polis = f"POLIS-2025-{random.randint(1000,9999)}"
     nomor_sertifikat = f"CERT-2025-{random.randint(1000,9999)}"
 
@@ -128,7 +130,7 @@ if submitted:
             f"{format_tanggal(tanggal_mulai)} – {format_tanggal(tanggal_berakhir)}",
             ", ".join(ditanggung),
             f"Rp {biaya_derek:,}",
-            f"Rp {kredit_limit_klaim:,}",
+            f"Rp {kredit_limit_awal:,}",
             "Rp 20.000.000"
         ]
     }
@@ -143,19 +145,24 @@ if submitted:
     # ==============================
     st.subheader("💰 Input Biaya Klaim")
 
+    total_klaim_terpakai = sum([
+        int(k["Biaya Klaim (Rp)"].replace("Rp", "").replace(",", "").strip())
+        for k in st.session_state.daftar_klaim
+    ])
+    sisa_kredit_limit = kredit_limit_awal - total_klaim_terpakai
+
     with st.form("form_klaim"):
         col1, col2, col3 = st.columns(3)
         with col1:
             klaim_tanggal = st.date_input("Tanggal Klaim", value=date.today(), key="klaim_tanggal")
         with col2:
-            klaim_biaya = st.number_input("Biaya Klaim (Rp)", min_value=0, step=100000, key="klaim_biaya")
+            klaim_biaya = st.number_input("Biaya Klaim (Rp)", min_value=0, max_value=sisa_kredit_limit, step=100000, key="klaim_biaya")
         with col3:
             klaim_nomor_invoice = st.text_input("Nomor Invoice", key="klaim_nomor_invoice")
 
-        col4 = st.columns(1)[0]
-        klaim_vendor = col4.text_input("Nama Vendor", key="klaim_vendor")
+        klaim_vendor = st.text_input("Nama Vendor", key="klaim_vendor")
 
-        st.markdown(f"**Kredit Limit (Otomatis):** Rp {kredit_limit_klaim:,}")
+        st.markdown(f"**Kredit Limit Tersisa:** Rp {sisa_kredit_limit:,}")
 
         submit_klaim = st.form_submit_button("Simpan Biaya Klaim")
 
@@ -165,13 +172,22 @@ if submitted:
             "Biaya Klaim (Rp)": f"Rp {klaim_biaya:,}",
             "Nomor Invoice": klaim_nomor_invoice,
             "Nama Vendor": klaim_vendor,
-            "Kredit Limit": f"Rp {kredit_limit_klaim:,}"
+            "Kredit Limit Tersisa": f"Rp {sisa_kredit_limit - klaim_biaya:,}"
         }
         st.session_state.daftar_klaim.append(klaim_data)
         st.success("📌 Biaya klaim berhasil disimpan!")
 
     # Tampilkan daftar semua klaim
     if st.session_state.daftar_klaim:
-        st.subheader("📑 Daftar Klaim yang Disimpan")
+        st.subheader("📑 Riwayat Biaya Klaim")
         df_klaim_all = pd.DataFrame(st.session_state.daftar_klaim)
         st.dataframe(df_klaim_all, use_container_width=True)
+
+        total_klaim_terpakai = sum([
+            int(k["Biaya Klaim (Rp)"].replace("Rp", "").replace(",", "").strip())
+            for k in st.session_state.daftar_klaim
+        ])
+        sisa_kredit_limit = kredit_limit_awal - total_klaim_terpakai
+
+        st.markdown(f"### 💼 Total Klaim Digunakan: **Rp {total_klaim_terpakai:,}**")
+        st.markdown(f"### 💳 Sisa Kredit Limit: **Rp {sisa_kredit_limit:,}**")
