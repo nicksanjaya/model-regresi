@@ -4,8 +4,8 @@ import pandas as pd
 import random
 
 # Konfigurasi halaman
-st.set_page_config(page_title="Pendaftaran Asuransi", layout="wide")
-st.title("🚗 Pendaftaran Asuransi Kendaraan")
+st.set_page_config(page_title="Pendaftaran Garansi", layout="wide")
+st.title("🚗 Pendaftaran Garansi Kendaraan")
 
 # Fungsi format tanggal Indonesia
 def format_tanggal(tgl):
@@ -24,7 +24,7 @@ if "daftar_klaim" not in st.session_state:
 kredit_limit_awal = 50000000
 
 # Form input
-with st.form("form_asuransi"):
+with st.form("form_garansi"):
     col1, col2 = st.columns(2)
 
     with col1:
@@ -137,7 +137,7 @@ if submitted:
 
     # Tampilkan dalam bentuk tabel
     df_ringkasan = pd.DataFrame(data_ringkasan)
-    st.subheader("📄 Sertifikat Asuransi Kendaraan")
+    st.subheader("📄 Sertifikat Garansi Kendaraan")
     st.table(df_ringkasan)
 
 # ==============================
