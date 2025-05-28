@@ -140,9 +140,12 @@ if submitted:
     st.subheader("📄 Sertifikat Asuransi Kendaraan")
     st.table(df_ringkasan)
 
-    # ==============================
-    # INPUT BIAYA KLAIM
-    # ==============================
+# ==============================
+# INPUT BIAYA KLAIM (aktif setelah form asuransi disubmit)
+# ==============================
+if submitted or st.session_state.get("asuransi_sudah_submit"):
+    st.session_state.asuransi_sudah_submit = True
+
     st.subheader("💰 Input Biaya Klaim")
 
     total_klaim_terpakai = sum([
@@ -177,7 +180,6 @@ if submitted:
         st.session_state.daftar_klaim.append(klaim_data)
         st.success("📌 Biaya klaim berhasil disimpan!")
 
-    # Tampilkan daftar semua klaim
     if st.session_state.daftar_klaim:
         st.subheader("📑 Riwayat Biaya Klaim")
         df_klaim_all = pd.DataFrame(st.session_state.daftar_klaim)
