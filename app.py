@@ -132,3 +132,39 @@ if submitted:
     df_ringkasan = pd.DataFrame(data_ringkasan)
     st.subheader("📄 Sertifikat Asuransi Kendaraan")
     st.table(df_ringkasan)
+
+    # ==============================
+    # INPUT BIAYA KLAIM
+    # ==============================
+    st.subheader("💰 Input Biaya Klaim")
+
+    with st.form("form_klaim"):
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            klaim_tanggal = st.date_input("Tanggal Klaim", value=date.today(), key="klaim_tanggal")
+        with col2:
+            klaim_biaya = st.number_input("Biaya Klaim (Rp)", min_value=0, step=100000, key="klaim_biaya")
+        with col3:
+            klaim_nomor_invoice = st.text_input("Nomor Invoice", key="klaim_nomor_invoice")
+
+        col4, col5 = st.columns(2)
+        with col4:
+            klaim_vendor = st.text_input("Nama Vendor", key="klaim_vendor")
+        with col5:
+            klaim_kredit_limit = st.number_input("Kredit Limit (Rp)", min_value=0, step=100000, key="klaim_kredit_limit")
+
+        submit_klaim = st.form_submit_button("Simpan Biaya Klaim")
+
+    if submit_klaim:
+        data_klaim = {
+            "Tanggal Klaim": format_tanggal(klaim_tanggal),
+            "Biaya Klaim": f"Rp {klaim_biaya:,}",
+            "Nomor Invoice": klaim_nomor_invoice,
+            "Nama Vendor": klaim_vendor,
+            "Kredit Limit": f"Rp {klaim_kredit_limit:,}"
+        }
+        st.success("📌 Biaya klaim berhasil disimpan!")
+
+        st.subheader("📑 Rincian Biaya Klaim")
+        df_klaim = pd.DataFrame(data_klaim.items(), columns=["Informasi", "Detail"])
+        st.table(df_klaim)
