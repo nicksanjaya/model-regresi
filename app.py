@@ -50,9 +50,9 @@ with st.form("form_asuransi"):
         nomor_mesin = st.text_input("Nomor Mesin")
         kapasitas_mesin = st.text_input("Kapasitas Mesin (cc)")
         tahun_mobil = st.number_input("Tahun Mobil", min_value=1980, max_value=2025)
-        transmisi = st.selectbox("Transmisi", ["Manual", "Otomatis", "CVT"])
+        transmisi = st.selectbox("Transmisi", ["Manual", "Otomatis"])
         warna = st.text_input("Warna")
-        bahan_bakar = st.selectbox("Bahan Bakar", ["Bensin", "Diesel", "Listrik", "Hybrid"])
+        bahan_bakar = st.selectbox("Bahan Bakar", ["Bensin", "Diesel", "Listrik"])
         jarak_tempuh = st.number_input("Jarak Tempuh (KM)", min_value=0)
 
     submitted = st.form_submit_button("Submit")
@@ -96,7 +96,8 @@ if submitted:
             "Periode Garansi",
             "Komponen Ditanggung",
             "Biaya Mobil Derek",
-            "Batas Maksimum Klaim"
+            "Batas Maksimum Jumlah Keseluruhan Klaim",
+            "Batas Maksimum per Klaim"
         ],
         "Detail": [
             nomor_polis,
@@ -122,7 +123,8 @@ if submitted:
             f"{format_tanggal(tanggal_mulai)} – {format_tanggal(tanggal_berakhir)}",
             ", ".join(ditanggung),
             f"Rp {biaya_derek:,}",
-            "Rp 20.000.000 / Rp 50.000.000"
+            "Rp 50.000.000",
+            "Rp 20.000.000"
         ]
     }
 
